@@ -7,7 +7,6 @@
  */
 
 #include <stdlib.h>
-#include <string.h>
 
 #include "malloc.h"
 
@@ -43,15 +42,7 @@ void mem_free (void *p, size_t size, struct mem_domain *domain)
 
 static void *mem_simple_alloc (struct mem_domain *domain, size_t size, int how)
 {
-	void *p;
-
-	if ((p = malloc (size)) == NULL)
-		return NULL;
-
-	if ((how & MEM_ZERO) != 0)
-		memset (p, 0, size);
-
-	return p;
+	return (how & MEM_ZERO) != 0 ? calloc (1, size) : malloc (size);
 }
 
 static void mem_simple_free (struct mem_domain *domain, void *p, size_t size)
