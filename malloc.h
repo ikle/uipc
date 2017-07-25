@@ -11,8 +11,15 @@
 
 #include <stddef.h>
 
-struct mem_domain *mem_domain_alloc (const char *name);
-void mem_domain_free (struct mem_domain *domain);
+struct mem_domain {
+	void *(*alloc) (struct mem_domain *domain, size_t size, int how);
+	void (*free)   (struct mem_domain *domain, void *p, size_t size);
+
+	const char *name;
+	size_t size;
+};
+
+struct mem_domain mem_core;  /* core domain */
 
 enum mem_flags {
 	MEM_NOWAIT	= 1,	/* do not wait for resources    */
