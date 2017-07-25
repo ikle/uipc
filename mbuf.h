@@ -15,14 +15,6 @@ struct mbuf *mbuf_alloc (int how, int type);
 void mbuf_free (struct mbuf *m);
 
 /*
- * Set the data pointer of a newly-allocated mbuf to place an object of
- * the specified size at the end of the mbuf, longword aligned.
- *
- * Returns non-zero on success.
- */
-int mbuf_align (struct mbuf *m, size_t size);
-
-/*
  * Append data to the end of the buffer. Returns the number of bytes
  * actually written.
  */

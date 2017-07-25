@@ -62,7 +62,7 @@ void mbuf_free (struct mbuf *o)
  *
  * Returns non-zero on success.
  */
-int mbuf_align (struct mbuf *o, size_t size)
+static int mbuf_align (struct mbuf *o, size_t size)
 {
 	if (size > MLEN || o->size != 0)
 		return 0;
