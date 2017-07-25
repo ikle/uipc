@@ -64,7 +64,7 @@ void mbuf_free (struct mbuf *o)
  */
 int mbuf_align (struct mbuf *o, size_t size)
 {
-	if (size > MLEN)
+	if (size > MLEN || o->size != 0)
 		return 0;
 
 	o->data += (MLEN - (size)) & ~(sizeof (long) - 1);
