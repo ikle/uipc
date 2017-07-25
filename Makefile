@@ -1,4 +1,4 @@
-TARGETS = mbuf-simple.o
+TARGETS = malloc-simple.o mbuf-simple.o
 CFLAGS = -Wall -O6 -I"$(CURDIR)"/include
 
 all: $(TARGETS)
