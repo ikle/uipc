@@ -1,4 +1,5 @@
-TARGETS =
+TARGETS = mbuf-simple.o
+CFLAGS = -Wall -O6 -I"$(CURDIR)"/include
 
 all: $(TARGETS)
 
