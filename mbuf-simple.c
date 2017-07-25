@@ -148,6 +148,7 @@ void *mbuf_add_head (struct mbuf **m, int how, size_t size)
 	if (size <= MLEN && (o = mbuf_alloc (how, o->type)) != NULL) {
 		o->next = *m;
 		o->size = size;
+		mbuf_align (o, size);
 		*m = o;
 
 		return o->data;
