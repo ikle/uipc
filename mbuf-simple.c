@@ -218,7 +218,7 @@ void *mbuf_get_head (struct mbuf **m, int how, size_t size)
 	return NULL;
 }
 
-void *mbuf_get_tail (struct mbuf *m , int how, size_t size)
+void *mbuf_get_tail (struct mbuf *m, int how, size_t size)
 {
 	/* TODO: implement */
 	return NULL;
