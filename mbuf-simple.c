@@ -1,7 +1,7 @@
 /*
  * Memory buffers management interface, simple variant
  *
- * Copyright (c) 2015-2017 Alexei A. Smekalkine
+ * Copyright (c) 2015-2019 Alexei A. Smekalkine
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
@@ -247,30 +247,32 @@ int mbuf_del_head (struct mbuf **m, size_t size)
 	return size == 0;
 }
 
-static size_t del_tail (struct mbuf **m, size_t size)
+static size_t del_tail (struct mbuf *o, size_t size)
 {
-	struct mbuf *o = *m;
-	size_t deleted, planned;
+	size_t rest = size;
 
-	if (o == NULL)
-		return 0;
+	if (o->next != NULL) {
+		rest -= del_tail (o->next, size);
 
-	if ((deleted = del_tail (&o->next, size)) == size)
-		return deleted;
-
-	planned = size - deleted;
-
-	if (o->size > planned) {
-		o->size -= planned;
-		return size;
+		if (o->next->size == 0) {
+			mbuf_free (o->next);
+			o->next = NULL;
+		}
 	}
 
-	deleted += o->size;
-	*m = NULL; mbuf_free (o);  /* unlink and free */
-	return deleted;
+	if (rest < o->size) {
+		o->size -= rest;
+		rest = 0;
+	}
+	else {
+		rest -= o->size;
+		o->size = 0;
+	}
+
+	return size - rest;
 }
 
 int mbuf_del_tail (struct mbuf *o, size_t size)
 {
-	return del_tail (&o, size) == size;
+	return o == NULL ? 0 : del_tail (o, size) == size;
 }
