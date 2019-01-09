@@ -31,7 +31,7 @@ struct mbuf *mbuf_alloc (int how, int type)
 {
 	struct mbuf *o;
 
-	if ((o = mem_alloc (MSIZE, domain, type)) == NULL)
+	if ((o = mem_alloc (MSIZE, domain, how)) == NULL)
 		return NULL;
 
 	o->next = NULL;
