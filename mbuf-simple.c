@@ -196,10 +196,10 @@ void *mbuf_get_head (struct mbuf **m, int how, size_t size)
 	if (o->size >= size)
 		return o->data;
 
-	if (mbuf_add_head (m, how, size) == NULL)
+	if ((p = mbuf_add_head (m, how, size)) == NULL)
 		return NULL;
 
-	for (p = o->data; o != NULL; o = (*m)->next) {
+	for (; o != NULL; o = (*m)->next) {
 		if (o->size > size) {
 			memcpy (p, o->data, size);
 			o->size -= size;
