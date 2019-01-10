@@ -276,3 +276,65 @@ int mbuf_del_tail (struct mbuf *o, size_t size)
 {
 	return o == NULL ? 0 : del_tail (o, size) == size;
 }
+
+/*
+ * Copy the first (or last) size bytes of the buffer chain into the line
+ * buffer and cuf off it.
+ */
+int mbuf_pull_head (struct mbuf **m, void *buf, size_t size)
+{
+	struct mbuf *o;
+	char *p;
+
+	for (o = *m, p = buf; o != NULL; o = *m) {
+		if (o->size > size) {
+			memcpy (p, o->data, size);
+			o->data += size;
+			o->size -= size;
+			return 1;
+		}
+
+		memcpy (p, o->data, o->size);
+		p += o->size;
+
+		*m = o->next;
+		size -= o->size;
+
+		o->next = NULL; mbuf_free (o);  /* unlink and free */
+	}
+
+	return size == 0;
+}
+
+static size_t pull_tail (struct mbuf *o, void *buf, size_t size)
+{
+	size_t rest = size;
+	char *p = buf;
+
+	if (o->next != NULL) {
+		rest -= pull_tail (o->next, buf, size);
+
+		if (o->next->size == 0) {
+			mbuf_free (o->next);
+			o->next = NULL;
+		}
+	}
+
+	if (rest < o->size) {
+		o->size -= rest;
+		memcpy (p, o->data + o->size, rest);
+		rest = 0;
+	}
+	else {
+		rest -= o->size;
+		memcpy (p + rest, o->data, o->size);
+		o->size = 0;
+	}
+
+	return size - rest;
+}
+
+int mbuf_pull_tail (struct mbuf *m, void *buf, size_t size)
+{
+	return pull_tail (m, buf, size) == size;
+}

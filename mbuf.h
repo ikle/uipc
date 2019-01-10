@@ -51,4 +51,11 @@ void *mbuf_get_tail (struct mbuf *m , int how, size_t size);
 int mbuf_del_head (struct mbuf **m, size_t size);
 int mbuf_del_tail (struct mbuf *m,  size_t size);
 
+/*
+ * Copy the first (or last) size bytes of the buffer chain into the line
+ * buffer and cuf off it.
+ */
+int mbuf_pull_head (struct mbuf **m, void *buf, size_t size);
+int mbuf_pull_tail (struct mbuf *m,  void *buf, size_t size);
+
 #endif  /* SYS_MBUF_H */
