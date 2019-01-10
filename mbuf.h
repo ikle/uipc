@@ -1,7 +1,7 @@
 /*
  * Memory buffers management interface
  *
- * Copyright (c) 2015-2017 Alexei A. Smekalkine
+ * Copyright (c) 2015-2019 Alexei A. Smekalkine
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
