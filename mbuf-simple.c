@@ -277,17 +277,15 @@ static size_t pull_tail (struct mbuf *o, void *buf, size_t size)
 		if (buf != NULL)
 			memcpy (p, o->data + o->size, rest);
 
-		rest = 0;
-	}
-	else {
-		rest -= o->size;
-
-		if (buf != NULL)
-			memcpy (p + rest, o->data, o->size);
-
-		o->size = 0;
+		return size;
 	}
 
+	rest -= o->size;
+
+	if (buf != NULL)
+		memcpy (p + rest, o->data, o->size);
+
+	o->size = 0;
 	return size - rest;
 }
 
