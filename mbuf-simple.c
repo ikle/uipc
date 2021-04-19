@@ -288,14 +288,18 @@ int mbuf_pull_head (struct mbuf **m, void *buf, size_t size)
 
 	for (o = *m, p = buf; o != NULL; o = *m) {
 		if (o->size > size) {
-			memcpy (p, o->data, size);
+			if (buf != NULL)
+				memcpy (p, o->data, size);
+
 			o->data += size;
 			o->size -= size;
 			return 1;
 		}
 
-		memcpy (p, o->data, o->size);
-		p += o->size;
+		if (buf != NULL) {
+			memcpy (p, o->data, o->size);
+			p += o->size;
+		}
 
 		*m = o->next;
 		size -= o->size;
@@ -322,12 +326,18 @@ static size_t pull_tail (struct mbuf *o, void *buf, size_t size)
 
 	if (rest < o->size) {
 		o->size -= rest;
-		memcpy (p, o->data + o->size, rest);
+
+		if (buf != NULL)
+			memcpy (p, o->data + o->size, rest);
+
 		rest = 0;
 	}
 	else {
 		rest -= o->size;
-		memcpy (p + rest, o->data, o->size);
+
+		if (buf != NULL)
+			memcpy (p + rest, o->data, o->size);
+
 		o->size = 0;
 	}
 
