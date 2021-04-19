@@ -225,61 +225,8 @@ void *mbuf_get_tail (struct mbuf *m, int how, size_t size)
 }
 
 /*
- * Cut off the first (or last) size bytes of the buffer chain.
- */
-int mbuf_del_head (struct mbuf **m, size_t size)
-{
-	struct mbuf *o;
-
-	for (o = *m; o != NULL; o = *m) {
-		if (o->size > size) {
-			o->data += size;
-			o->size -= size;
-			return 1;
-		}
-
-		*m = o->next;
-		size -= o->size;
-
-		o->next = NULL; mbuf_free (o);  /* unlink and free */
-	}
-
-	return size == 0;
-}
-
-static size_t del_tail (struct mbuf *o, size_t size)
-{
-	size_t rest = size;
-
-	if (o->next != NULL) {
-		rest -= del_tail (o->next, size);
-
-		if (o->next->size == 0) {
-			mbuf_free (o->next);
-			o->next = NULL;
-		}
-	}
-
-	if (rest < o->size) {
-		o->size -= rest;
-		rest = 0;
-	}
-	else {
-		rest -= o->size;
-		o->size = 0;
-	}
-
-	return size - rest;
-}
-
-int mbuf_del_tail (struct mbuf *o, size_t size)
-{
-	return o == NULL ? 0 : del_tail (o, size) == size;
-}
-
-/*
  * Copy the first (or last) size bytes of the buffer chain into the line
- * buffer and cuf off it.
+ * buffer and cuf off it. If buf is NULL then just cut off data.
  */
 int mbuf_pull_head (struct mbuf **m, void *buf, size_t size)
 {
