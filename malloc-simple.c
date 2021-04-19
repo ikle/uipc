@@ -39,7 +39,7 @@ struct mem_domain mem_core = {
  * size is specified by size. This region must previously be allocated
  * in the specified domain.
  */
-void *mem_alloc (size_t size, struct mem_domain *domain, int how)
+void *mem_alloc (struct mem_domain *domain, size_t size, int how)
 {
 	void *p;
 
@@ -53,7 +53,7 @@ void *mem_alloc (size_t size, struct mem_domain *domain, int how)
 	return p;
 }
 
-void mem_free (void *p, size_t size, struct mem_domain *domain)
+void mem_free (struct mem_domain *domain, void *p, size_t size)
 {
 	if (p == NULL)
 		return;

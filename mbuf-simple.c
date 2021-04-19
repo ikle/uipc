@@ -1,7 +1,7 @@
 /*
  * Memory buffers management interface, simple variant
  *
- * Copyright (c) 2015-2019 Alexei A. Smekalkine
+ * Copyright (c) 2015-2021 Alexei A. Smekalkine
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
@@ -31,7 +31,7 @@ struct mbuf *mbuf_alloc (int how, int type)
 {
 	struct mbuf *o;
 
-	if ((o = mem_alloc (MSIZE, domain, how)) == NULL)
+	if ((o = mem_alloc (domain, MSIZE, how)) == NULL)
 		return NULL;
 
 	o->next = NULL;
@@ -50,7 +50,7 @@ void mbuf_free (struct mbuf *o)
 
 	for (; o != NULL; o = next) {
 		next = o->next;
-		mem_free (o, MSIZE, domain);
+		mem_free (domain, o, MSIZE);
 	}
 }
 

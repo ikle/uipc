@@ -1,7 +1,7 @@
 /*
  * Memory management interface
  *
- * Copyright (c) 2015-2017 Alexei A. Smekalkine
+ * Copyright (c) 2015-2021 Alexei A. Smekalkine
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
@@ -39,7 +39,7 @@ enum mem_flags {
  * size is specified by size. This region must previously be allocated
  * in the specified domain.
  */
-void *mem_alloc (size_t size, struct mem_domain *domain, int how);
-void mem_free (void *p, size_t size, struct mem_domain *domain);
+void *mem_alloc (struct mem_domain *domain, size_t size, int how);
+void mem_free (struct mem_domain *domain, void *p, size_t size);
 
 #endif  /* SYS_MALLOC_H */
