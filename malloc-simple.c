@@ -20,7 +20,7 @@ static void mem_simple_free (struct mem_domain *domain, void *p, size_t size)
 	free (p);
 }
 
-struct mem_domain mem_core = {
+static struct mem_domain mem_core = {
 	.alloc	= mem_simple_alloc,
 	.free	= mem_simple_free,
 	.name	= "simple domain",

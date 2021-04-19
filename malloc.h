@@ -19,8 +19,6 @@ struct mem_domain {
 	size_t size;
 };
 
-struct mem_domain mem_core;  /* core domain */
-
 enum mem_flags {
 	MEM_NOWAIT	= 1,	/* do not wait for resources    */
 	MEM_ZERO	= 2,	/* set allocated memory to zero */
