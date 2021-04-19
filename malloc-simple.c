@@ -43,6 +43,9 @@ void *mem_alloc (size_t size, struct mem_domain *domain, int how)
 {
 	void *p;
 
+	if (domain == NULL)
+		domain = &mem_core;
+
 	if ((p = domain->alloc (domain, size, how)) == NULL)
 		return NULL;
 
@@ -52,6 +55,9 @@ void *mem_alloc (size_t size, struct mem_domain *domain, int how)
 
 void mem_free (void *p, size_t size, struct mem_domain *domain)
 {
+	if (domain == NULL)
+		domain = &mem_core;
+
 	domain->free (domain, p, size);
 	domain->size -= size;
 }
