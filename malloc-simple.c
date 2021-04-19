@@ -1,7 +1,7 @@
 /*
  * Memory management interface, simple variant
  *
- * Copyright (c) 2015-2017 Alexei A. Smekalkine
+ * Copyright (c) 2015-2021 Alexei A. Smekalkine
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
@@ -9,6 +9,22 @@
 #include <stdlib.h>
 
 #include "malloc.h"
+
+static void *mem_simple_alloc (struct mem_domain *domain, size_t size, int how)
+{
+	return (how & MEM_ZERO) != 0 ? calloc (1, size) : malloc (size);
+}
+
+static void mem_simple_free (struct mem_domain *domain, void *p, size_t size)
+{
+	free (p);
+}
+
+struct mem_domain mem_core = {
+	.alloc	= mem_simple_alloc,
+	.free	= mem_simple_free,
+	.name	= "simple domain",
+};
 
 /*
  * The mem_alloc function allocates memory for an object whose size is
@@ -39,19 +55,3 @@ void mem_free (void *p, size_t size, struct mem_domain *domain)
 	domain->free (domain, p, size);
 	domain->size -= size;
 }
-
-static void *mem_simple_alloc (struct mem_domain *domain, size_t size, int how)
-{
-	return (how & MEM_ZERO) != 0 ? calloc (1, size) : malloc (size);
-}
-
-static void mem_simple_free (struct mem_domain *domain, void *p, size_t size)
-{
-	free (p);
-}
-
-struct mem_domain mem_core = {
-	.alloc	= mem_simple_alloc,
-	.free	= mem_simple_free,
-	.name	= "simple domain",
-};
